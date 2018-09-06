@@ -1,6 +1,6 @@
 {
   "name": "garlic/graphql",
-  "description": "GraphQL Bundle uses for promoting new communication layer among microservices through Garlic Message Bus.",
+  "description": "GraphQL Bundle uses for sending and receiving graphql queries among microservices through Garlic Message Bus.",
   "keywords": ["GraphQL", "Microservices"],
   "license": "MIT",
   "authors": [
@@ -16,6 +16,7 @@
     }
   },
   "require": {
-    "php": ">=7.1"
+    "php": ">=7.1",
+    "youshido/graphql-bundle": "^1.4"
   }
 }
