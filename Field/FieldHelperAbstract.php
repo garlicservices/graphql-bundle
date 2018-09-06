@@ -1,0 +1,31 @@
+<?php
+
+namespace Garlic\GraphQL\Field;
+
+use Youshido\GraphQL\Type\NonNullType;
+use Youshido\GraphQL\Type\TypeInterface;
+use Youshido\GraphQLBundle\Field\AbstractContainerAwareField;
+use Youshido\GraphQL\Type\Object\AbstractObjectType;
+
+abstract class FieldHelperAbstract extends AbstractContainerAwareField
+{
+    /**
+     * Get argument and delete them from list of incoming arguments
+     *
+     * @param $name
+     * @param $args
+     * @return bool
+     */
+    protected function cutArgument($name, &$args)
+    {
+        if(!empty($args[$name])) {
+            $result = $args[$name];
+            if(!empty($result)) {
+                unset($args[$name]);
+                return $result;
+            }
+        }
+
+        return null;
+    }
+}

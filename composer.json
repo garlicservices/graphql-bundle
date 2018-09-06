@@ -1,0 +1,21 @@
+{
+  "name": "garlic/graphql",
+  "description": "GraphQL Bundle uses for promoting new communication layer among microservices through Garlic Message Bus.",
+  "keywords": ["GraphQL", "Microservices"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Maksym Churkyn",
+      "email": "imaximius@gmail.com"
+    }
+  ],
+  "type": "symfony-bundle",
+  "autoload": {
+    "psr-4": {
+      "Garlic\\GraphQL\\": ""
+    }
+  },
+  "require": {
+    "php": ">=7.1"
+  }
+}

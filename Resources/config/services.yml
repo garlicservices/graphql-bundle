@@ -1,0 +1,23 @@
+services:
+    # Graphql schema
+    graphql.schema:
+        public: true
+        synthetic: true
+
+    # Add Graphql processor
+    graphql.processor:
+        public: true
+        class: Youshido\GraphQLBundle\Execution\Processor
+        arguments:
+            $executionContext: '@graphql.execution_context'
+        calls:
+        - [setSecurityManager, ['@graphql.security_manager']]
+
+
+    # Add maker command for creating GraphQL type
+    maker.graphql.make_type:
+        class: App\Maker\MakeGraphQLType
+        public: true
+        tags: ['maker.command']
+        arguments:
+        - "@maker.doctrine_helper"
