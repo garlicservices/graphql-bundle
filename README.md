@@ -80,7 +80,7 @@ or by Address field (for example id)
 
 ```
 {
-  ApartmentFind(addres:{id:1}){
+  ApartmentFind(address:{id:1}){
     id
     address {
         id
