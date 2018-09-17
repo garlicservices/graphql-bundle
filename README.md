@@ -1,11 +1,11 @@
-# Garlic GraphQL bundle (under development)
+# Garlic GraphQL bundle
 
 This bundle allow microservices send to each other graphql queries 
 For correct usage the Bundle must be installed on both services (current and target)
 
 This bundle based on [youshido-php/GraphQLBundle](https://github.com/youshido-php/GraphQL), so special thanks to this guys for the excellent work! We've just made a couple updates ;)
 
-## Configuration and Usage
+## Configuration
 
 There are necessary thing make this bundle works:
 
@@ -45,3 +45,46 @@ bin/console maker:graphql:query
 Now you can review and update just created files! 
 
 It's time to run your first query!
+
+## Usage
+### Example steps to use bundle after init
+1. Create Entity (for example Apartments)
+2. Create GrapphQL type by using command above (for example name it Apartment). Just try to make CRUD mutations it is very useful command.
+3. Try to make a query
+```
+{
+  ApartmentFind(id:1){
+    id
+  }
+}
+
+```
+
+### Using included types
+1. Let's create new Entity (for example Address) and connect it to Apartments by using many to one relation.
+2. Than create GraphQL type by steps enplaned in step one
+3. Add just created type to Apartment type as new Address()
+4. Try to find with Apartment field (for example id)
+```
+{
+  ApartmentFind(id:1){
+    id
+    address {
+        id
+    }
+  }
+}
+``` 
+
+or by Address field (for example id)
+
+```
+{
+  ApartmentFind(addres:{id:1}){
+    id
+    address {
+        id
+    }
+  }
+}
+```
