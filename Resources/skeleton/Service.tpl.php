@@ -19,7 +19,7 @@ class <?= $class_name ?> extends AbstractCrudService
     */
     public function find(array $arguments, $orderBy = null, $limit = null, $offset = null)
     {
-        if(empty($limit)) {
+        if (empty($limit)) {
             $limit = getenv('DEFAULT_RESULT_LIMIT');
         }
 
@@ -62,7 +62,7 @@ class <?= $class_name ?> extends AbstractCrudService
     {
         /** @var <?= $entityName ?> $entity */
         $entity = $this->em->getRepository('<?= $entityFullName ?>')->find($id);
-        if(empty($entity)) {
+        if (empty($entity)) {
             throw new NotFoundHttpException("<?= $entityName ?> with ID $id not found.");
         }
 
@@ -84,7 +84,7 @@ class <?= $class_name ?> extends AbstractCrudService
     */
     public function delete(array $arguments, $limit = null, $offset = null)
     {
-        if(empty($limit)) {
+        if (empty($limit)) {
             $limit = getenv('DEFAULT_RESULT_LIMIT');
         }
 
@@ -92,7 +92,7 @@ class <?= $class_name ?> extends AbstractCrudService
         $entities = $this->em->getRepository('<?= $entityFullName ?>')
             ->findBy($arguments,  [], $limit, $offset);
 
-        if(count($entities) <= 0) {
+        if (count($entities) <= 0) {
             throw new NotFoundHttpException("<?= $entityName ?> list with input arguments is not found.");
         }
 
