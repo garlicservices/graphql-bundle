@@ -90,7 +90,7 @@ class <?= $class_name ?> extends AbstractCrudService
 
         /** @var <?= $entityName ?> $apartment */
         $entities = $this->em->getRepository('<?= $entityFullName ?>')
-            ->findBy($arguments,  [], $limit, $offset);
+            ->findBy($arguments, [], $limit, $offset);
 
         if (count($entities) <= 0) {
             throw new NotFoundHttpException("<?= $entityName ?> list with input arguments is not found.");

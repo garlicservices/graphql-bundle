@@ -47,6 +47,7 @@ class <?= $class_name ?> extends FieldHelperAbstract
     * @param array $args
     * @param ResolveInfo $info
     * @return mixed|null
+    * @throws \Doctrine\ORM\Mapping\MappingException
     */
     public function resolve($value, array $args, ResolveInfo $info)
     {
