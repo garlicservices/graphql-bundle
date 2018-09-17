@@ -88,3 +88,7 @@ or by Address field (for example id)
   }
 }
 ```
+## GraphiQL extension
+You can write queries in interactive editor with integrated documentation about schemas, queries and mutation. 
+To run this editor just run graphiql extension. Type to access to extension - **mydomain.com/graphql/explorer** 
+Extension is accessible only in development mode of Symfony application
