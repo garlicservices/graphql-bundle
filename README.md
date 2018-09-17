@@ -7,7 +7,7 @@ This bundle based on [youshido-php/GraphQLBundle](https://github.com/youshido-ph
 
 ## Configuration and Usage
 
-There are necessary thing for this bundle make to work:
+There are necessary thing make this bundle works:
 
 ### Add bundle to the Symfony project
 
@@ -25,6 +25,15 @@ bin/console maker:graphql:init
 
 ```bash
 bin/console maker:graphql:type
+```
+
+The command suggest you to create full CRUD mutations and queries, just type "y" to do so. After that the command will 
+create some classes and CRUD service with all the functionality. The one thing you have to this service is working, just add next rows to your service.yaml
+```yaml
+# Make graphql services public
+App\Service\GraphQL\:
+    resource: '../src/Service/GraphQL/*'
+    public: true
 ```
 
 ### Make your first graphql query or mutation

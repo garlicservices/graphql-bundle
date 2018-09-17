@@ -29,6 +29,12 @@ abstract class TypeAbstract extends TypeHelper
     abstract public function build(BuilderInterface $builder);
 
     /**
+     * Returns related Entity name
+     *
+     * @return string
+     */
+    abstract public function getEntity();
+    /**
      * Create an object depends on is argument required
      *
      * @param bool $argument

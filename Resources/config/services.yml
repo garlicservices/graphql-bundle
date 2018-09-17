@@ -14,10 +14,28 @@ services:
         - [setSecurityManager, ['@graphql.security_manager']]
 
 
+    # Helper for making classes
+    class_finder:
+        class: Garlic\GraphQL\Service\Helper\ClassFinder
+        public: true
+        arguments:
+        - "%kernel.root_dir%"
+
     # Add maker command for creating GraphQL type
     maker.graphql.make_type:
-        class: App\Maker\MakeGraphQLType
+        class: Garlic\GraphQL\Maker\MakeGraphQLType
         public: true
         tags: ['maker.command']
         arguments:
         - "@maker.doctrine_helper"
+        - "@maker.file_manager"
+
+    # Add maker command for creating GraphQL type
+    maker.graphql.make_query:
+        class: Garlic\GraphQL\Maker\MakeGraphQLQuery
+        public: true
+        tags: ['maker.command']
+        arguments:
+        - "@class_finder"
+        - '%graphql.schema_class%'
+        - "@maker.file_manager"

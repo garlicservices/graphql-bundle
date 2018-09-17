@@ -2,11 +2,12 @@
 
 namespace <?= $namespace ?>;
 
-use Garlic\GraphQL\Type\Interfaces\BuilderInterface;
-use Garlic\GraphQL\Type\TypeAbstract;
+use App\GraphQL\Abstracts\Type\Interfaces\BuilderInterface;
+use App\GraphQL\Abstracts\Type\TypeAbstract;
 <?php foreach ($uses as $use): ?>
 use Youshido\GraphQL\Type\Scalar\<?=$use ?>;
 <?php endforeach; ?>
+use <?= $bounded_full_class_name ?>;
 
 class <?= $class_name ?> extends TypeAbstract
 {
@@ -23,5 +24,13 @@ class <?= $class_name ?> extends TypeAbstract
         ->addField( '<?= $formField['fieldName'] ?>', new <?= $formField['fieldType']?>()<?php if (!empty($formField['fieldRequired'])): ?>, ['required' => '<?= ($formField['fieldRequired']) ? 'true':'false'?>', 'group' => 'create'] <?php endif ?>)
     <?php endforeach; ?>
     ;
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    public function getEntity()
+    {
+        return <?=$bounded_class_name?>::class;
     }
 }

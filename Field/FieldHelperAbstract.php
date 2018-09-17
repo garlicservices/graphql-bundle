@@ -2,10 +2,7 @@
 
 namespace Garlic\GraphQL\Field;
 
-use Youshido\GraphQL\Type\NonNullType;
-use Youshido\GraphQL\Type\TypeInterface;
 use Youshido\GraphQLBundle\Field\AbstractContainerAwareField;
-use Youshido\GraphQL\Type\Object\AbstractObjectType;
 
 abstract class FieldHelperAbstract extends AbstractContainerAwareField
 {
