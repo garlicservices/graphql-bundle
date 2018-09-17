@@ -2,7 +2,7 @@
 
 namespace Garlic\GraphQL\Maker;
 
-use App\Service\Helper\ClassFinder;
+use Garlic\GraphQL\Service\Helper\ClassFinder;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
