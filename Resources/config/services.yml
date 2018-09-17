@@ -10,6 +10,7 @@ services:
         class: Youshido\GraphQLBundle\Execution\Processor
         arguments:
             $executionContext: '@graphql.execution_context'
+            $eventDispatcher: "@event_dispatcher"
         calls:
         - [setSecurityManager, ['@graphql.security_manager']]
 
