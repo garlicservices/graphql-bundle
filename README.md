@@ -3,7 +3,7 @@
 This bundle allow microservices send to each other graphql queries 
 For correct usage the Bundle must be installed on both services (current and target)
 
-This bundle based on [youshido-php/GraphQLBundle](https://github.com/youshido-php/GraphQL), so special thanks to this guys for the excellent work! We've just made a couple updates ;)
+This bundle based on [youshido-php/GraphQLBundle](https://github.com/youshido-php/GraphQLBundle), so special thanks to this guys for the excellent work! We've just made a couple updates ;)
 
 ## Configuration
 
