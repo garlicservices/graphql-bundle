@@ -1,7 +1,7 @@
 # Garlic GraphQL bundle
 
-This bundle allow microservices send to each other graphql queries 
-For correct usage the Bundle must be installed on both services (current and target)
+This bundle allow to communicate microservices via graphql to each other.
+It should be installed on both endpoints for proper message encode/decode flow.
 
 This bundle based on [youshido-php/GraphQLBundle](https://github.com/youshido-php/GraphQL), so special thanks to this guys for the excellent work! We've just made a couple updates ;)
 
@@ -27,8 +27,9 @@ bin/console maker:graphql:init
 bin/console maker:graphql:type
 ```
 
-The command suggest you to create full CRUD mutations and queries, just type "y" to do so. After that the command will 
-create some classes and CRUD service with all the functionality. The one thing you have to this service is working, just add next rows to your service.yaml
+The command suggest you to create full CRUD mutations and queries, just type "y" to do so. 
+There would be created CRUD-classes with related functionality.
+Last thing you need to make this bundle working is to update your service.yaml
 ```yaml
 # Make graphql services public
 App\Service\GraphQL\:
@@ -42,15 +43,15 @@ App\Service\GraphQL\:
 bin/console maker:graphql:query
 ```
 
-Now you can review and update just created files! 
+Now you can review and update newly created files! 
 
 It's time to run your first query!
 
 ## Usage
 ### Example steps to use bundle after init
 1. Create Entity (for example Apartments)
-2. Create GrapphQL type by using command above (for example name it Apartment). Just try to make CRUD mutations it is very useful command.
-3. Try to make a query
+2. Create GraphQL type by using command above (for example name it Apartment), type "y" to make CRUD mutations automatically.
+3. Try to execute a query
 ```
 {
   ApartmentFind(id:1){
@@ -60,11 +61,11 @@ It's time to run your first query!
 
 ```
 
-### Using included types
+### Using related types
 1. Let's create new Entity (for example Address) and connect it to Apartments by using many to one relation.
-2. Than create GraphQL type by steps enplaned in step one
-3. Add just created type to Apartment type as new Address()
-4. Try to find with Apartment field (for example id)
+2. Create GraphQL type "Address" similar to step one
+3. Add newly created type to Apartment type as `new Address()`
+4. Try to find Apartment with address fields (for example id)
 ```
 {
   ApartmentFind(id:1){
@@ -76,7 +77,7 @@ It's time to run your first query!
 }
 ``` 
 
-or by Address field (for example id)
+or directly by Address "where" query (for example id)
 
 ```
 {
@@ -88,3 +89,5 @@ or by Address field (for example id)
   }
 }
 ```
+
+## Enjoy!
