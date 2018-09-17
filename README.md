@@ -18,13 +18,13 @@ composer require garlic/graphql
 ### Initialize GraphQL schema(create schema, query and mutation fields)
 
 ```bash
-bin/console maker:graphql:init
+bin/console make:graphql:init
 ```
 
 ### Create graphql type (command able to get fields from existing Entity)
 
 ```bash
-bin/console maker:graphql:type
+bin/console make:graphql:type
 ```
 
 The command suggest you to create full CRUD mutations and queries, just type "y" to do so. 
@@ -40,7 +40,7 @@ App\Service\GraphQL\:
 ### Make your first graphql query or mutation
 
 ```bash
-bin/console maker:graphql:query
+bin/console make:graphql:query
 ```
 
 Now you can review and update newly created files! 

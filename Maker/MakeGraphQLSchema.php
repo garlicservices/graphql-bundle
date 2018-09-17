@@ -16,6 +16,18 @@ use Symfony\Component\Console\Input\InputInterface;
  */
 final class MakeGraphQLSchema extends AbstractMaker
 {
+    /** @var string */
+    private $rootDir;
+    
+    /**
+     * MakeGraphQLSchema constructor.
+     * @param string $rootDir
+     */
+    public function __construct(string $rootDir)
+    {
+        $this->rootDir = $rootDir;
+    }
+    
     /**
      * Return command name
      * @return string
@@ -50,14 +62,14 @@ final class MakeGraphQLSchema extends AbstractMaker
                 'namespace' => 'GraphQL\\Query',
                 'template' => 'Query.tpl.php',
                 'variables' => [
-                    'queries' => []
+                    'fields' => []
                 ]
             ],
             'MutationType' =>[
                 'namespace' => 'GraphQL\\Mutation',
                 'template' => 'Mutation.tpl.php',
                 'variables' => [
-                    'mutations' => []
+                    'fields' => []
                 ]
             ],
             'schema' =>[
@@ -67,11 +79,14 @@ final class MakeGraphQLSchema extends AbstractMaker
             ],
         ];
 
-        $generator->generateFile(
-            dirname(dirname(dirname(__FILE__))).'/config/packages/graphql.yaml',
-            dirname(dirname(__FILE__)) . '/Resources/skeleton/graphql.tpl.yaml',
-            []
-        );
+        $configFile = dirname($this->rootDir).'/config/packages/graphql.yaml';
+        if(!is_file($configFile)) {
+            $generator->generateFile(
+                $configFile,
+                dirname(dirname(__FILE__)) . '/Resources/skeleton/graphql.tpl.yaml',
+                []
+            );
+        }
 
         foreach ($classes as $name => $class) {
             $classNameDetails = $generator->createClassNameDetails(

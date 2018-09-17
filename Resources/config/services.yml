@@ -22,6 +22,14 @@ services:
         arguments:
         - "%kernel.root_dir%"
 
+    # Add maker command for creating GraphQL schema
+    maker.graphql.make_schema:
+        class: Garlic\GraphQL\Maker\MakeGraphQLSchema
+        public: true
+        tags: ['maker.command']
+        arguments:
+        - "%kernel.root_dir%"
+
     # Add maker command for creating GraphQL type
     maker.graphql.make_type:
         class: Garlic\GraphQL\Maker\MakeGraphQLType
@@ -38,5 +46,5 @@ services:
         tags: ['maker.command']
         arguments:
         - "@class_finder"
-        - '%graphql.schema_class%'
         - "@maker.file_manager"
+        - '%graphql.schema_class%'

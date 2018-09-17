@@ -2,7 +2,7 @@
 
 namespace <?= $namespace ?>;
 
-use Garlic\GraphQL\Service\AbstractCrudService;
+use Garlic\GraphQL\Service\Abstracts\AbstractCrudService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use <?= $entityFullName ?>;
 

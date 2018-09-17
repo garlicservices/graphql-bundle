@@ -38,7 +38,7 @@ final class MakeGraphQLQuery extends AbstractMaker
      * @param $schemaNamespace
      * @param FileManager $fileManager
      */
-    public function __construct(ClassFinder $classFinder, string $schemaNamespace, FileManager $fileManager)
+    public function __construct(ClassFinder $classFinder, FileManager $fileManager, $schemaNamespace = '')
     {
         $this->classFinder = $classFinder;
         $this->schemaNamespace = $schemaNamespace;
