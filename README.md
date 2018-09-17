@@ -3,11 +3,11 @@
 This bundle allow to communicate microservices via graphql to each other.
 It should be installed on both endpoints for proper message encode/decode flow.
 
-This bundle based on [youshido-php/GraphQLBundle](https://github.com/youshido-php/GraphQL), so special thanks to this guys for the excellent work! We've just made a couple updates ;)
+This bundle based on [youshido-php/GraphQLBundle](https://github.com/youshido-php/GraphQLBundle), so special thanks to this guys for the excellent work! We've just made a couple updates ;)
 
 ## Configuration
 
-There are necessary thing make this bundle works:
+There are necessary things make this bundle works:
 
 ### Add bundle to the Symfony project
 
@@ -45,7 +45,7 @@ bin/console maker:graphql:query
 
 Now you can review and update newly created files! 
 
-It's time to run your first query!
+It's time to run your first query! Try to send your query to **mydomain.com/graphql**
 
 ## Usage
 ### Example steps to use bundle after init
@@ -89,5 +89,9 @@ or directly by Address "where" query (for example id)
   }
 }
 ```
+## GraphiQL extension
+You can write queries in interactive editor with integrated documentation about schemas, queries and mutation. 
+To run this editor just run graphiql extension. Type to access to extension - **mydomain.com/graphql/explorer** 
+Extension is accessible only in development mode of Symfony application.
 
 ## Enjoy!
