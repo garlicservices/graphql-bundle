@@ -2,8 +2,8 @@
 
 namespace <?= $namespace ?>;
 
-use App\GraphQL\Abstracts\Type\Interfaces\BuilderInterface;
-use App\GraphQL\Abstracts\Type\TypeAbstract;
+use Garlic\GraphQL\Type\Interfaces\BuilderInterface;
+use Garlic\GraphQL\Type\TypeAbstract;
 <?php foreach ($uses as $use): ?>
 use Youshido\GraphQL\Type\Scalar\<?=$use ?>;
 <?php endforeach; ?>

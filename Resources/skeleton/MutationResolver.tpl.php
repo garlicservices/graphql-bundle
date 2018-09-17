@@ -2,7 +2,7 @@
 
 namespace <?= $namespace ?>;
 
-use App\GraphQL\Abstracts\Field\FieldHelperAbstract;
+use Garlic\GraphQL\Field\FieldHelperAbstract;
 use Youshido\GraphQL\Config\Field\FieldConfig;
 use Youshido\GraphQL\Execution\ResolveInfo;
 use Youshido\GraphQL\Type\AbstractType;
