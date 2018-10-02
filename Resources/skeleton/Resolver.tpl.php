@@ -25,8 +25,16 @@ class <?= $class_name ?> extends FieldHelperAbstract
     {
         $type = new <?= $form_class_name ?>();
         $config->addArguments(
-        <?php if($suffix != 'Find' && $suffix != 'Delete'): ?>
+        <?php if($suffix == 'Create'): ?>
     $type->getArguments()
+        <?php elseif($suffix == 'Update'): ?>
+    [
+            'arguments' => $type->init(true),
+            'values' => $type->init(true),
+            'limit' => new IntType(),
+            'offset' => new IntType(),
+        ]
+        
         <?php else: ?>
     array_merge(
                 $type->getArguments(),
@@ -63,7 +71,12 @@ class <?= $class_name ?> extends FieldHelperAbstract
     <?php elseif($suffix == 'Create'): ?>
         ->create($args)
     <?php elseif($suffix == 'Update'): ?>
-        ->update($this->cutArgument('id', $arguments), $arguments)
+        ->update(
+                $this->cutArgument('arguments', $args),
+                $this->cutArgument('values', $args),
+                $this->cutArgument('limit', $args),
+                $this->cutArgument('offset', $args)
+            )
     <?php elseif($suffix == 'Delete'): ?>
         ->delete($args, $limit, $offset)
     <?php endif ?>

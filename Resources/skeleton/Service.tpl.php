@@ -53,36 +53,44 @@ class <?= $class_name ?> extends AbstractCrudService
     * Update <?= $entityName ?> object
     * Must return listable result (array)
     *
-    * @param int $id
     * @param array $arguments
+    * @param array $values
+    * @param null $limit
+    * @param int $offset
     * @return array
     * @throws \Doctrine\ORM\Mapping\MappingException
     */
-    public function update(int $id, array $arguments)
+    public function update(array $arguments, array $values, $limit = null, $offset = 0)
     {
-        /** @var <?= $entityName ?> $entity */
-        $entity = $this->em->getRepository('<?= $entityFullName ?>')->find($id);
-        if (empty($entity)) {
-            throw new NotFoundHttpException("<?= $entityName ?> with ID $id not found.");
+        if (empty($limit)) {
+            $limit = getenv('DEFAULT_RESULT_LIMIT');
         }
 
-        $entity = $this->hydrate($entity, $arguments);
+        /** @var <?= $entityName ?> $entity */
+        $entities = $this->em->getRepository('<?= $entityFullName ?>')->findBy($arguments, [], $limit, $offset);
+        if (empty($entities)) {
+            throw new NotFoundHttpException("<?= $entityName ?> with input arguments is not found.");
+        }
 
-        $this->em->persist($entity);
+        foreach ($entities as &$entity) {
+            $entity = $this->hydrate($entity, $values);
+            $this->em->persist($entity);
+        }
+
         $this->em->flush();
 
-        return [$entity];
+        return $entities;
     }
 
     /**
     * Delete found <?= $entityName ?> entities
     *
     * @param array $arguments
-    * @param null $limit
-    * @param null $offset
+    * @param int|null $limit
+    * @param int $offset
     * @return array
     */
-    public function delete(array $arguments, $limit = null, $offset = null)
+    public function delete(array $arguments, $limit = null, $offset = 0)
     {
         if (empty($limit)) {
             $limit = getenv('DEFAULT_RESULT_LIMIT');
