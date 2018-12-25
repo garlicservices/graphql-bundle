@@ -33,10 +33,11 @@ class AbstractCrudService
     protected function hydrate($entity, array $arguments)
     {
         foreach ($arguments as $argument => $value) {
-            if(is_array($value)) {
-                $value = $this->hydrateRelation($entity, $argument, $value);
+            if (is_array($value)) {
+                if(isset($this->em->getClassMetadata(get_class($entity))->associationMappings[$argument])) {
+                    $value = $this->hydrateRelation($entity, $argument, $value);
+                }
             }
-
             $entity->{"set".Inflector::camelize($argument)}($value);
         }
 
