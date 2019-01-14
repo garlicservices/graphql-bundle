@@ -67,7 +67,7 @@ abstract class TypeAbstract extends TypeHelper
      */
     public function getArguments($groupName = null)
     {
-        return $this->getFieldsByGroup(
+        return $this->setRequired(
             $this->updateRelations($this->builder->getArguments(), true),
             $groupName
         );
@@ -82,21 +82,21 @@ abstract class TypeAbstract extends TypeHelper
      */
     public function getFields($groupName = null)
     {
-        return $this->getFieldsByGroup(
+        return $this->setRequired(
             $this->updateRelations($this->builder->getFields()),
             $groupName
         );
     }
 
     /**
-     * Get fields by group
+     * set required to attributes
      *
      * @param array $fields
      * @param string $groupName
      * @return array
      * @throws \Youshido\GraphQL\Exception\ConfigurationException
      */
-    private function getFieldsByGroup(array $fields, string $groupName = null): array
+    private function setRequired(array $fields, string $groupName = null): array
     {
         if(empty($groupName)) {
             return $fields;
