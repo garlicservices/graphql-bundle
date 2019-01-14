@@ -56,21 +56,6 @@ class TypeBuilder implements BuilderInterface
      */
     public function addArgument(string $name, $type, array $options = [])
     {
-        $this->arguments[$name] = array_merge($options, ['type' => $type]);
-
-        return $this;
-    }
-
-    /**
-     * Create new type argument and field
-     *
-     * @param string $name
-     * @param        $type
-     * @param array  $options
-     * @return BuilderInterface
-     */
-    public function addFieldAndArgument(string $name, $type, array $options = [])
-    {
         $data = array_merge($options, ['type' => $type]);
         $this->arguments[$name] = $data;
         $this->fields[$name] = $data;
