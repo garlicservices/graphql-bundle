@@ -16,9 +16,36 @@ interface BuilderInterface
     public function addField(string $name, $type, array $options = []);
 
     /**
+     * Create new type argument
+     *
+     * @param string $name
+     * @param $type
+     * @param array $options
+     * @return BuilderInterface
+     */
+    public function addArgument(string $name, $type, array $options = []);
+
+    /**
+     * Create new type argument and field
+     *
+     * @param string $name
+     * @param $type
+     * @param array $options
+     * @return BuilderInterface
+     */
+    public function addFieldAndArgument(string $name, $type, array $options = []);
+
+    /**
      * Get type object
      *
      * @return array
      */
     public function getFields();
+
+    /**
+     * Get type object
+     *
+     * @return array
+     */
+    public function getArguments();
 }
