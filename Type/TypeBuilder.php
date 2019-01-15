@@ -21,11 +21,9 @@ class TypeBuilder implements BuilderInterface
      */
     public function addField(string $name, $type, array $options = [])
     {
-        if(isset($options['argument']) && $options['argument'] == false) {
-            $this->fields[$name] = array_merge($options, ['type' => $type]);
-        } else {
+        $this->fields[$name] = array_merge($options, ['type' => $type]);
+        if (!isset($options['argument']) || (isset($options['argument']) && $options['argument'] !== false)) {
             $this->arguments[$name] = array_merge($options, ['type' => $type]);
-            $this->fields[$name] = array_merge($options, ['type' => $type]);
         }
 
         return $this;
