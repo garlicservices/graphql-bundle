@@ -21,7 +21,12 @@ class TypeBuilder implements BuilderInterface
      */
     public function addField(string $name, $type, array $options = [])
     {
-        $this->fields[$name] = array_merge($options, ['type' => $type]);
+        if(isset($options['argument']) && $options['argument'] == false) {
+            $this->fields[$name] = array_merge($options, ['type' => $type]);
+        } else {
+            $this->arguments[$name] = array_merge($options, ['type' => $type]);
+            $this->fields[$name] = array_merge($options, ['type' => $type]);
+        }
 
         return $this;
     }
@@ -46,20 +51,4 @@ class TypeBuilder implements BuilderInterface
         return $this->arguments;
     }
 
-    /**
-     * Create new type argument
-     *
-     * @param string $name
-     * @param        $type
-     * @param array  $options
-     * @return BuilderInterface
-     */
-    public function addArgument(string $name, $type, array $options = [])
-    {
-        $data = array_merge($options, ['type' => $type]);
-        $this->arguments[$name] = $data;
-        $this->fields[$name] = $data;
-
-        return $this;
-    }
 }
