@@ -68,7 +68,7 @@ abstract class TypeAbstract extends TypeHelper
     public function getArguments($groupName = null)
     {
         return $this->setRequired(
-            $this->updateRelations($this->builder->getFields(), true),
+            $this->updateRelations($this->builder->getArguments(), true),
             $groupName
         );
     }
@@ -89,7 +89,7 @@ abstract class TypeAbstract extends TypeHelper
     }
 
     /**
-     * Get fields by group
+     * set required to attributes
      *
      * @param array $fields
      * @param string $groupName

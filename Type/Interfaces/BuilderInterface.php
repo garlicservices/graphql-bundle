@@ -21,4 +21,11 @@ interface BuilderInterface
      * @return array
      */
     public function getFields();
+
+    /**
+     * Get type object
+     *
+     * @return array
+     */
+    public function getArguments();
 }
