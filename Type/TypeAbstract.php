@@ -34,6 +34,7 @@ abstract class TypeAbstract extends TypeHelper
      * @return string
      */
     abstract public function getEntity();
+
     /**
      * Create an object depends on is argument required
      *
@@ -75,44 +76,36 @@ abstract class TypeAbstract extends TypeHelper
 
     /**
      * Return list of arguments
-     *
-     * @param null $groupName
      * @return array
      * @throws \Youshido\GraphQL\Exception\ConfigurationException
      */
-    public function getFields($groupName = null)
+    public function getFields()
     {
-        return $this->setRequired(
-            $this->updateRelations($this->builder->getFields()),
-            $groupName
-        );
+        return $this->updateRelations($this->builder->getFields());
     }
 
     /**
-     * set required to attributes
+     * Set required to attributes
      *
-     * @param array $fields
+     * @param array  $fields
      * @param string $groupName
      * @return array
      * @throws \Youshido\GraphQL\Exception\ConfigurationException
      */
     private function setRequired(array $fields, string $groupName = null): array
     {
-        if(empty($groupName)) {
-            return $fields;
-        }
-
         foreach ($fields as $fieldName => $field) {
-            if(!empty($field['required']) && !empty($field['groups'])) {
-                if(!is_array($field['groups'])) {
-                    $field['groups'] = [$field['groups']];
-                }
-
-                if(in_array($groupName, $field['groups'])) {
+            if (!empty($field['required'])) {
+                if (empty($field['groups']) || in_array($groupName, $field['groups'])) {
                     $fields[$fieldName] = $this->makeRequired($fields[$fieldName]);
+                } else {
+                    if (!is_array($field['groups'])) {
+                        $field['groups'] = [$field['groups']];
+                    }
                 }
             }
         }
+
 
         return $fields;
     }
