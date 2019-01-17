@@ -17,8 +17,8 @@ abstract class FieldHelperAbstract extends AbstractContainerAwareField
     {
         if(!empty($args[$name])) {
             $result = $args[$name];
+            unset($args[$name]);
             if(!empty($result)) {
-                unset($args[$name]);
                 return $result;
             }
         }
