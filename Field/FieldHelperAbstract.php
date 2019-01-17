@@ -15,12 +15,10 @@ abstract class FieldHelperAbstract extends AbstractContainerAwareField
      */
     protected function cutArgument($name, &$args)
     {
-        if(!empty($args[$name])) {
+        if (isset($args[$name])) {
             $result = $args[$name];
-            if(!empty($result)) {
-                unset($args[$name]);
-                return $result;
-            }
+            unset($args[$name]);
+            return $result;
         }
 
         return null;
