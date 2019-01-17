@@ -21,7 +21,7 @@ class <?= $class_name ?> extends TypeAbstract
     {
         $builder
     <?php foreach ($formFields as $formField): ?>
-        ->addField( '<?= $formField['fieldName'] ?>', new <?= $formField['fieldType']?>()<?php if (!empty($formField['fieldRequired'])): ?>, ['required' => '<?= ($formField['fieldRequired']) ? 'true':'false'?>', 'group' => 'create'] <?php endif ?>)
+        ->addField( '<?= $formField['fieldName'] ?>', new <?= $formField['fieldType']?>()<?php if (!empty($formField['fieldRequired'])): ?>, ['required' => '<?= ($formField['fieldRequired']) ? 'true':'false'?>', 'groups' => 'create'] <?php endif ?>)
     <?php endforeach; ?>
     ;
     }
