@@ -9,7 +9,7 @@ use Garlic\GraphQL\Type\Interfaces\BuilderInterface;
 
 abstract class TypeAbstract extends TypeHelper
 {
-    /** @var TypeBuilder  */
+    /** @var TypeBuilder */
     private $builder;
 
     /**
@@ -44,19 +44,11 @@ abstract class TypeAbstract extends TypeHelper
      */
     public function init($argument = false)
     {
-        if(!empty($argument)) {
-            return new ArgumentTypeAbstract(
-                $this->getArguments(),
-                $this->getName(),
-                $this->getDescription()
-            );
+        if (!empty($argument)) {
+            return new ArgumentTypeAbstract($this->getArguments(), $this->getName(), $this->getDescription());
         }
 
-        return new FieldAbstract(
-            $this->getFields(),
-            $this->getName(),
-            $this->getDescription()
-        );
+        return new FieldAbstract($this->getFields(), $this->getName(), $this->getDescription());
     }
 
     /**
@@ -68,10 +60,7 @@ abstract class TypeAbstract extends TypeHelper
      */
     public function getArguments($groupName = null)
     {
-        return $this->setRequired(
-            $this->updateRelations($this->builder->getArguments(), true),
-            $groupName
-        );
+        return $this->setRequired($this->updateRelations($this->builder->getArguments(), true), $groupName);
     }
 
     /**
@@ -96,16 +85,14 @@ abstract class TypeAbstract extends TypeHelper
     {
         foreach ($fields as $fieldName => $field) {
             if (!empty($field['required'])) {
+                if (isset($field['groups']) && !is_array($field['groups'])) {
+                    $field['groups'] = [$field['groups']];
+                }
                 if (empty($field['groups']) || in_array($groupName, $field['groups'])) {
                     $fields[$fieldName] = $this->makeRequired($fields[$fieldName]);
-                } else {
-                    if (!is_array($field['groups'])) {
-                        $field['groups'] = [$field['groups']];
-                    }
                 }
             }
         }
-
 
         return $fields;
     }
