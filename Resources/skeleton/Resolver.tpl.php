@@ -9,6 +9,7 @@ use Youshido\GraphQL\Type\AbstractType;
 use Youshido\GraphQL\Type\ListType\ListType;
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
 use Youshido\GraphQL\Type\Scalar\IntType;
+use Garlic\GraphQL\Exceptions\GraphQLQueryException;
 use <?= $form_full_class_name ?>;
 use <?= $serviceFullName ?>;
 
@@ -62,25 +63,29 @@ class <?= $class_name ?> extends FieldHelperAbstract
     <?php if($suffix == 'Find' || $suffix == 'Delete'): ?>
     $limit = $this->cutArgument('limit', $args);
         $offset = $this->cutArgument('offset', $args);
-
+    $service = $this->container->get(<?= $serviceName?>::class);
     <?php endif ?>
-    return $this->container
-            ->get(<?= $serviceName?>::class)
+    $result = $service
     <?php if($suffix == 'Find'): ?>
-        ->find($args, ['id' => 'desc'], $limit, $offset)
+        ->find($args, ['id' => 'desc'], $limit, $offset);
     <?php elseif($suffix == 'Create'): ?>
-        ->create($args)
+        ->create($args);
     <?php elseif($suffix == 'Update'): ?>
         ->update(
                 $this->cutArgument('arguments', $args),
                 $this->cutArgument('values', $args),
                 $this->cutArgument('limit', $args),
                 $this->cutArgument('offset', $args)
-            )
+            );
     <?php elseif($suffix == 'Delete'): ?>
-        ->delete($args, $limit, $offset)
+        ->delete($args, $limit, $offset);
     <?php endif ?>
-    ;
+    if (!empty($service->getErrors())) {
+        foreach ($service->getErrors() as $error) {
+            $info->getExecutionContext()->addError(new GraphQLQueryException($error->getMessage()));
+        }
+    }
+    return $result;
     }
 
     /**

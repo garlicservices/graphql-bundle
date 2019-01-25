@@ -3,11 +3,12 @@
 namespace <?= $namespace ?>;
 
 use Garlic\GraphQL\Service\Abstracts\AbstractCrudService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Garlic\GraphQL\Service\Traits\ValidateTrait;
 use <?= $entityFullName ?>;
 
 class <?= $class_name ?> extends AbstractCrudService
 {
+    use ValidateTrait;
     /**
     * Return <?= $entityName ?> list
     *
@@ -42,7 +43,9 @@ class <?= $class_name ?> extends AbstractCrudService
     public function create(array $arguments)
     {
         $entity = $this->hydrate(new <?= $entityName ?>(), $arguments);
-
+        if (!$this->validate($entity)) {
+        return [];
+        }
         $this->em->persist($entity);
         $this->em->flush();
 
@@ -69,11 +72,15 @@ class <?= $class_name ?> extends AbstractCrudService
         /** @var <?= $entityName ?> $entity */
         $entities = $this->em->getRepository('<?= $entityFullName ?>')->findBy($arguments, [], $limit, $offset);
         if (empty($entities)) {
-            throw new NotFoundHttpException("<?= $entityName ?> with input arguments is not found.");
+            $this->addError("<?= $entityName ?> with input arguments is not found.");
         }
 
-        foreach ($entities as &$entity) {
+        foreach ($entities as $k => &$entity) {
             $entity = $this->hydrate($entity, $values);
+            if (!$this->validate($entity)) {
+            unset($entities[$k])
+            continue;
+            }
             $this->em->persist($entity);
         }
 
@@ -101,7 +108,7 @@ class <?= $class_name ?> extends AbstractCrudService
             ->findBy($arguments, [], $limit, $offset);
 
         if (count($entities) <= 0) {
-            throw new NotFoundHttpException("<?= $entityName ?> list with input arguments is not found.");
+            $this->addError("<?= $entityName ?> list with input arguments is not found.");
         }
 
         foreach ($entities as $entity) {
