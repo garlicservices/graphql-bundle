@@ -4,8 +4,16 @@ namespace Garlic\GraphQL\Service\Traits;
 
 use Symfony\Component\Validator\Validation;
 
+/**
+ * Trait ValidateTrait
+ *
+ * @package Garlic\GraphQL\Service\Traits
+ */
 trait ValidateTrait
 {
+    /**
+     * @var array
+     */
     private $errors = [];
 
     /**
@@ -16,12 +24,18 @@ trait ValidateTrait
         return $this->errors;
     }
 
-    public function addError($error)
+    /**
+     * @param $error
+     */public function addError($error)
     {
         $this->errors[] = $error;
     }
 
-    public function validate($model)
+    /**
+     * @param $model
+     *
+     * @return bool
+     */public function validate($model)
     {
         $validator = Validation::createValidator();
         $errors = $validator->validate($model);
