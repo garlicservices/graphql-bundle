@@ -78,7 +78,7 @@ class <?= $class_name ?> extends AbstractCrudService
         foreach ($entities as $k => &$entity) {
             $entity = $this->hydrate($entity, $values);
             if (!$this->validate($entity)) {
-            unset($entities[$k])
+            unset($entities[$k]);
             continue;
             }
             $this->em->persist($entity);
