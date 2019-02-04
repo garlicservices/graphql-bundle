@@ -5,6 +5,7 @@ namespace Garlic\GraphQL\Type;
 
 use Youshido\GraphQL\Type\NonNullType;
 use Youshido\GraphQL\Type\TypeInterface;
+use Youshido\GraphQL\Type\ListType\ListType;
 
 class TypeHelper
 {
@@ -44,9 +45,18 @@ class TypeHelper
 
             /** @var TypeAbstract $value */
             foreach ($field as $name => $value){
-                if($name == 'type' && $value instanceof TypeAbstract){
-                    $fields[$key][$name] = $value->init($argument);
+                if($name == 'type') {
+                    if($value instanceof ListType) {
+                        if($value->getItemType() instanceof TypeAbstract ) {
+                            $fields[$key][$name] = new ListType($value->getItemType()->init($argument));
+                        }
+                    }
+
+                    if($value instanceof TypeAbstract){
+                        $fields[$key][$name] = $value->init($argument);
+                    }
                 }
+
             }
         }
 
