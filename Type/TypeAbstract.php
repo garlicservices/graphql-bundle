@@ -45,7 +45,7 @@ abstract class TypeAbstract extends TypeHelper
     public function init($argument = false)
     {
         if (!empty($argument)) {
-            return new ArgumentTypeAbstract($this->getArguments(), $this->getName(), $this->getDescription());
+            return new ArgumentTypeAbstract($this->getArguments($argument), $this->getName(), $this->getDescription());
         }
 
         return new FieldAbstract($this->getFields(), $this->getName(), $this->getDescription());
