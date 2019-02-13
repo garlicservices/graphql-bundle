@@ -51,12 +51,10 @@ class TypeHelper
                             $fields[$key][$name] = new ListType($value->getItemType()->init($argument));
                         }
                     }
-
                     if($value instanceof TypeAbstract){
                         $fields[$key][$name] = $value->init($argument);
                     }
                 }
-
             }
         }
 
