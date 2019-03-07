@@ -11,18 +11,21 @@ class ArgumentTypeAbstract extends AbstractInputObjectType
     private $fields;
     private $name;
     private $description;
+    private $multiple;
 
     /**
      * AbstractType constructor.
      * @param array $fields
      * @param string $name
      * @param string $description
+     * @param bool $multiple
      */
-    public function __construct(array $fields, string $name, string $description)
+    public function __construct(array $fields, string $name, string $description, bool $multiple)
     {
         $this->fields = $fields;
         $this->name = $name;
         $this->description = $description;
+        $this->multiple = $multiple;
 
         parent::__construct();
     }
@@ -45,7 +48,9 @@ class ArgumentTypeAbstract extends AbstractInputObjectType
      */
     public function getName()
     {
-        return $this->name.'Type';
+        $suffix = (false === $this->multiple) ? "" : "List";
+
+        return $this->name.$suffix.'Argument';
     }
 
     /**

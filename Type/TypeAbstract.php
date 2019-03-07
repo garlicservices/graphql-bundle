@@ -6,6 +6,7 @@ namespace Garlic\GraphQL\Type;
 use Garlic\GraphQL\Argument\ArgumentTypeAbstract;
 use Garlic\GraphQL\Field\FieldAbstract;
 use Garlic\GraphQL\Type\Interfaces\BuilderInterface;
+use Youshido\GraphQL\Type\ListType\ListType;
 
 abstract class TypeAbstract extends TypeHelper
 {
@@ -42,13 +43,22 @@ abstract class TypeAbstract extends TypeHelper
      * @return ArgumentTypeAbstract|FieldAbstract
      * @throws \Youshido\GraphQL\Exception\ConfigurationException
      */
-    public function init($argument = false)
+    public function init($argument = false, $multiple = false)
     {
         if (!empty($argument)) {
-            return new ArgumentTypeAbstract($this->getArguments(), $this->getName(), $this->getDescription());
+            return new ArgumentTypeAbstract(
+                ($multiple === true) ? $this->makeMultiple($this->getArguments()) : $this->getArguments(),
+                $this->getName(),
+                $this->getDescription(),
+                $multiple
+            );
         }
 
-        return new FieldAbstract($this->getFields(), $this->getName(), $this->getDescription());
+        return new FieldAbstract(
+            ($multiple === true) ? new ListType($this->getFields()) : $this->getFields(),
+            $this->getName(),
+            $this->getDescription()
+        );
     }
 
     /**
@@ -58,9 +68,9 @@ abstract class TypeAbstract extends TypeHelper
      * @return array
      * @throws \Youshido\GraphQL\Exception\ConfigurationException
      */
-    public function getArguments($groupName = null)
+    public function  getArguments($groupName = null, $multiple = false)
     {
-        return $this->setRequired($this->updateRelations($this->builder->getArguments(), true), $groupName);
+        return $this->setRequired($this->updateRelations($this->builder->getArguments(), true, $multiple), $groupName);
     }
 
     /**
