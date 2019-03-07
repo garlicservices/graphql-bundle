@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @author Maksym Churkyn <imaximius@gmail.com>
@@ -25,20 +26,31 @@ final class MakeGraphQLType extends AbstractMaker
 {
     /** @var DoctrineHelper */
     private $entityHelper;
-    /**
-     * @var FileManager
-     */
+
+    /** @var FileManager */
     private $fileManager;
-    
+
+    /** @var  */
+    private $queryType;
+
+    /** @var */
+    private $mutationType;
+
     /**
      * MakeGraphQLTypeForm constructor.
      * @param DoctrineHelper $entityHelper
      * @param FileManager $fileManager
+     * @param $schema
      */
-    public function __construct(DoctrineHelper $entityHelper, FileManager $fileManager)
-    {
+    public function __construct(
+        DoctrineHelper $entityHelper,
+        FileManager $fileManager,
+        $schema
+    ) {
         $this->entityHelper = $entityHelper;
         $this->fileManager = $fileManager;
+        $this->queryType = $schema->getQueryType();
+        $this->mutationType = $schema->getMutationType();
     }
 
     /**
@@ -358,11 +370,12 @@ final class MakeGraphQLType extends AbstractMaker
         $fileName = $this->fileManager->getRelativePathForFutureClass($classNameDetails->getFullName());
         $classObjectFullName = $classNameDetails->getFullName();
         if(is_file($fileName)) {
-            $classObject = new $classObjectFullName();
+            $classObject = $this->{lcfirst($type).'Type'};
             foreach ($classObject->getFields() as $classField) {
+                $className = get_class($classField);
                 $classFields[] = [
-                    'fullName' => get_class($classField),
-                    'shortName' => Str::getShortClassName(get_class($classField))
+                    'fullName' => $className,
+                    'shortName' => Str::getShortClassName($className)
                 ];
             }
             

@@ -10,6 +10,29 @@ use Youshido\GraphQL\Config\Schema\SchemaConfig;
 class <?= $class_name ?> extends AbstractSchema
 {
     /**
+    * @var QueryType
+    */
+    private $queryType;
+
+    /**
+    * @var MutationType
+    */
+    private $mutationType;
+
+    /**
+    * Schema constructor.
+    * @param QueryType $queryType
+    * @param MutationType $mutationType
+    */
+    public function __construct(QueryType $queryType, MutationType $mutationType)
+    {
+        $this->queryType = $queryType;
+        $this->mutationType = $mutationType;
+
+        return parent::__construct();
+    }
+
+    /**
     * Main service schema. Contains mutation and query fields
     *
     * @param SchemaConfig $config
@@ -17,7 +40,7 @@ class <?= $class_name ?> extends AbstractSchema
     public function build(SchemaConfig $config)
     {
         $config
-        ->setMutation(new MutationType())
-        ->setQuery(new QueryType());
+            ->setQuery($this->queryType)
+            ->setMutation($this->mutationType);
     }
 }

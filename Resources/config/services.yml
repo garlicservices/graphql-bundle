@@ -1,9 +1,4 @@
 services:
-    # Graphql schema
-    graphql.schema:
-        public: true
-        synthetic: true
-
     # Add Graphql processor
     graphql.processor:
         public: true
@@ -38,6 +33,7 @@ services:
         arguments:
         - "@maker.doctrine_helper"
         - "@maker.file_manager"
+        - "@=container.get(parameter('graphql.schema_service'))"
 
     # Add maker command for creating GraphQL type
     maker.graphql.make_query:
@@ -48,3 +44,4 @@ services:
         - "@class_finder"
         - "@maker.file_manager"
         - '%graphql.schema_class%'
+        - "@=container.get(parameter('graphql.schema_service'))"

@@ -8,11 +8,34 @@ use Youshido\GraphQL\Execution\ResolveInfo;
 use Youshido\GraphQL\Type\AbstractType;
 use Youshido\GraphQL\Type\ListType\ListType;
 use Youshido\GraphQL\Type\Object\AbstractObjectType;
+use Doctrine\ORM\EntityManagerInterface;
+use Youshido\GraphQLExtension\Type\PaginatedResultType;
+use Youshido\GraphQLExtension\Type\PagingParamsType;
+use Youshido\GraphQLExtension\Type\Sorting\SortingParamsType;
 use <?= $bounded_full_class_name ?>;
 use <?= $entityFullName ?>;
 
 class <?= $class_name ?> extends FieldHelperAbstract
 {
+    /** @var <?= $bounded_class_name ?> */
+    private $type;
+
+    /** @var EntityManagerInterface*/
+    private $entityManager;
+
+    /**
+    * <?= $class_name ?> constructor.
+    * @param <?= $bounded_class_name ?> $type
+    * @param EntityManagerInterface $entityManager
+    */
+    public function __construct(<?= $bounded_class_name ?> $type, EntityManagerInterface $entityManager)
+    {
+        $this->type = $type;
+        $this->entityManager = $entityManager;
+
+        return parent::__construct();
+    }
+
     /**
     * Arguments that used for filtering returned result.
     * Used for validating incoming parameters
@@ -22,8 +45,7 @@ class <?= $class_name ?> extends FieldHelperAbstract
     */
     public function build(FieldConfig $config)
     {
-        $type = new <?= $bounded_class_name ?>();
-        $config->addArguments($type->getArguments());
+        $config->addArguments($this->type->getArguments());
     }
 
     /**
@@ -37,8 +59,7 @@ class <?= $class_name ?> extends FieldHelperAbstract
     */
     public function resolve($value, array $args, ResolveInfo $info)
     {
-        $repository = $this->container
-            ->get('doctrine.orm.default_entity_manager')
+        $repository = $this->entityManager
             ->getRepository(<?= $entityName ?>::class);
 
         // TODO: Create your own logic here
@@ -55,10 +76,7 @@ class <?= $class_name ?> extends FieldHelperAbstract
     */
     public function getType()
     {
-        $type = new <?= $bounded_class_name ?>();
-        return new ListType(
-            $type->init()
-        );
+        return new ListType($this->type->init());
     }
 
     /**

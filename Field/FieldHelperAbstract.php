@@ -3,6 +3,7 @@
 namespace Garlic\GraphQL\Field;
 
 use Youshido\GraphQLBundle\Field\AbstractContainerAwareField;
+use Youshido\GraphQL\Type\ListType\ListType;
 
 abstract class FieldHelperAbstract extends AbstractContainerAwareField
 {
@@ -11,7 +12,7 @@ abstract class FieldHelperAbstract extends AbstractContainerAwareField
      *
      * @param $name
      * @param $args
-     * @return bool
+     * @return array|null
      */
     protected function cutArgument($name, &$args)
     {
@@ -22,5 +23,21 @@ abstract class FieldHelperAbstract extends AbstractContainerAwareField
         }
 
         return null;
+    }
+
+    /**
+     * Make argument as list
+     *
+     * @param array $arguments
+     * @return array
+     */
+    protected function makeMultiple(array $arguments)
+    {
+        $result = [];
+        foreach ($arguments as $argumentName => $argument) {
+            $result[$argumentName] = $argument['type'] = new ListType($argument['type']);
+        }
+
+        return $result;
     }
 }

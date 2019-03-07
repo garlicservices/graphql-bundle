@@ -71,4 +71,21 @@ class AbstractCrudService
         return $this->hydrate($relation, $value);
     }
 
+    /**
+     * Make sorting array
+     *
+     * @param $sort
+     * @return array
+     */
+    public function mapSorting($sort)
+    {
+        if(empty($sort)) {
+            return [];
+        }
+
+        $mapping = [-1 => 'DESC', 1 => 'ASC'];
+        return [
+            $sort['field'] => $mapping[$sort['order']]
+        ];
+    }
 }

@@ -17,6 +17,9 @@ use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Bundle\MakerBundle\Validator;
+use App\GraphQL\Mutation\MutationType;
+use App\GraphQL\Query\QueryType;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @author Maksym Churkyn <imaximius@gmail.com>
@@ -31,18 +34,31 @@ final class MakeGraphQLQuery extends AbstractMaker
     
     /** @var FileManager */
     private $fileManager;
-    
+
+    /** @var QueryType */
+    private $queryType;
+
+    /** @var MutationType */
+    private $mutationType;
+
     /**
      * MakeGraphQLQuery constructor.
      * @param ClassFinder $classFinder
-     * @param $schemaNamespace
      * @param FileManager $fileManager
+     * @param string $schemaNamespace
+     * @param $schema
      */
-    public function __construct(ClassFinder $classFinder, FileManager $fileManager, $schemaNamespace = '')
-    {
+    public function __construct(
+        ClassFinder $classFinder,
+        FileManager $fileManager,
+        $schemaNamespace = '',
+        $schema
+    ) {
         $this->classFinder = $classFinder;
         $this->schemaNamespace = $schemaNamespace;
         $this->fileManager = $fileManager;
+        $this->queryType = $schema->getQueryType();
+        $this->mutationType = $schema->getMutationType();
     }
 
 
@@ -224,7 +240,7 @@ final class MakeGraphQLQuery extends AbstractMaker
         $fileName = $this->fileManager->getRelativePathForFutureClass($classNameDetails->getFullName());
         $classObjectFullName = $classNameDetails->getFullName();
         if(is_file($fileName)) {
-            $classObject = new $classObjectFullName();
+            $classObject = $this->{lcfirst($type).'Type'};
             foreach ($classObject->getFields() as $classField) {
                 $classFields[] = [
                     'fullName' => get_class($classField),

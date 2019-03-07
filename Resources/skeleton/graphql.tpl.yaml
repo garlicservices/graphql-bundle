@@ -1,2 +1,2 @@
 graphql:
-    schema_class: 'App\GraphQL\Schema'
+    schema_service: 'App\GraphQL\Schema'

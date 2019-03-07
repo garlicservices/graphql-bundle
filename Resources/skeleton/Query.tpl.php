@@ -10,28 +10,54 @@ use Youshido\GraphQL\Type\Object\AbstractObjectType;
 
 class <?= $class_name ?> extends AbstractObjectType
 {
+    <?php foreach ($fields as $field): ?>
+/** @var <?= $field['shortName'] ?> */
+    private $<?= lcfirst($field['shortName']) ?>;
+    <? if(next($fields)) echo "\n"; ?>
+    <?php endforeach; ?>
+
     /**
-    * Main query type
-    * Contains root fields of service
-    *
-    * @param ObjectTypeConfig $config
-    */
+     * QueryType dependencies setter.
+     * @required
+     *
+<?php foreach ($fields as $field): ?>
+     * @param <?= $field['shortName'] ?> $<?= lcfirst($field['shortName']) ?>
+
+<?php endforeach; ?>
+     */
+    public function setDependencies(
+<?php foreach ($fields as $field): ?>
+        <?= $field['shortName'] ?> $<?= lcfirst($field['shortName']) ?><? if(next($fields)) echo ','; ?>
+
+<?php endforeach; ?>
+    ) {
+<?php foreach ($fields as $field): ?>
+        $this-><?= lcfirst($field['shortName']) ?> = $<?= lcfirst($field['shortName']) ?>;
+<?php endforeach; ?>
+    }
+
+    /**
+     * Main query type
+     * Contains root fields of service
+     *
+     * @param ObjectTypeConfig $config
+     */
     public function build($config)
     {
         $config->addFields(
             [
-        <?php foreach ($fields as $field): ?>
-        new <?= $field['shortName'] ?>(),
-        <?php endforeach; ?>
-    ]
+    <?php foreach ($fields as $field): ?>
+            $this-><?= lcfirst($field['shortName']) ?>,
+    <?php endforeach; ?>
+        ]
         );
     }
 
     /**
-    * Return description which will be represented on documentation page
-    *
-    * @return string
-    */
+     * Return description which will be represented on documentation page
+     *
+     * @return string
+     */
     public function getDescription()
     {
         return "Main query level. Represents all query fields of whole service.";

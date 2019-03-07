@@ -42,7 +42,6 @@ class TypeHelper
     protected function updateRelations(array $fields, $argument = false)
     {
         foreach ($fields as $key => $field){
-
             /** @var TypeAbstract $value */
             foreach ($field as $name => $value){
                 if($name == 'type') {
@@ -79,5 +78,21 @@ class TypeHelper
         }
 
         return $argument;
+    }
+
+    /**
+     * Make argument as list
+     *
+     * @param array $arguments
+     * @return array
+     */
+    protected function makeMultiple(array $arguments)
+    {
+        $result = [];
+        foreach ($arguments as $argumentName => $argument) {
+            $result[$argumentName] = $argument['type'] = new ListType($argument['type']);
+        }
+
+        return $result;
     }
 }
