@@ -7,14 +7,14 @@ use Symfony\Component\Validator\Validation;
 /**
  * Trait ValidateTrait
  *
- * @package Garlic\GraphQL\Service\Traits
+ * @ydeprecated since version 1.2, use Validator class instead
  */
 trait ValidateTrait
 {
     /**
      * @var array
      */
-    private $errors = [];
+    public $errors = [];
 
     /**
      * @return array
@@ -39,6 +39,7 @@ trait ValidateTrait
     {
         $validator = Validation::createValidator();
         $errors = $validator->validate($model);
+
         if (($errors->count() > 0)) {
             $this->errors = array_merge($this->errors, $errors);
 

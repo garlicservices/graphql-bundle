@@ -2,13 +2,28 @@
 
 namespace <?= $namespace ?>;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\MappingException;
 use Garlic\GraphQL\Service\Abstracts\AbstractCrudService;
-use Garlic\GraphQL\Service\Traits\ValidateTrait;
+use Garlic\GraphQL\Service\Helper\Validator;
 use <?= $entityFullName ?>;
 
 class <?= $class_name ?> extends AbstractCrudService
 {
-    use ValidateTrait;
+/** @var Validator */
+    public $validator;
+
+   /**
+    * <?= $class_name ?> constructor.
+    * @param EntityManagerInterface $em
+    * @param Validator $validator
+    */
+    public function __construct(EntityManagerInterface $em, Validator $validator)
+    {
+        $this->validator = $validator;
+        parent::__construct($em);
+    }
+
 
     /**
      * Return <?= $entityName ?> list
@@ -47,14 +62,14 @@ class <?= $class_name ?> extends AbstractCrudService
      *
      * @param array $items
      * @return array
-     * @throws \Doctrine\ORM\Mapping\MappingException
+     * @throws MappingException
      */
     public function create(array $items)
     {
         $result = [];
         foreach ($items as $arguments) {
             $entity = $this->hydrate(new <?= $entityName ?>(), $arguments);
-            if (!$this->validate($entity)) {
+            if (false === $this->validator->validate($entity)) {
                 return [];
             }
 
@@ -76,7 +91,7 @@ class <?= $class_name ?> extends AbstractCrudService
      * @param null $limit
      * @param int $offset
      * @return array
-     * @throws \Doctrine\ORM\Mapping\MappingException
+     * @throws MappingException
      */
     public function update(array $arguments, array $values, $limit = null, $offset = 0)
     {
@@ -87,12 +102,12 @@ class <?= $class_name ?> extends AbstractCrudService
         /** @var <?= $entityName ?> $entity */
         $entities = $this->em->getRepository('<?= $entityFullName ?>')->findBy($arguments, [], $limit, $offset);
         if (empty($entities)) {
-            $this->addError("<?= $entityName ?> with input arguments is not found.");
+            $this->validator->addError("<?= $entityName ?> with input arguments is not found.");
         }
 
         foreach ($entities as $k => &$entity) {
             $entity = $this->hydrate($entity, $values);
-            if (!$this->validate($entity)) {
+            if (!$this->validator->validate($entity)) {
                 unset($entities[$k]);
                 continue;
             }
@@ -124,7 +139,7 @@ class <?= $class_name ?> extends AbstractCrudService
             ->findBy($arguments, [], $limit, $offset);
 
         if (count($entities) <= 0) {
-            $this->addError("<?= $entityName ?> list with input arguments is not found.");
+            $this->validator->addError("<?= $entityName ?> list with input arguments is not found.");
         }
 
         foreach ($entities as $entity) {

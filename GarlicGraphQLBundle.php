@@ -2,8 +2,8 @@
 
 namespace Garlic\GraphQL;
 
-use Youshido\GraphQLBundle\GraphQLBundle;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class GarlicGraphQLBundle extends GraphQLBundle
+class GarlicGraphQLBundle extends Bundle
 {
 }

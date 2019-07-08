@@ -13,7 +13,11 @@ class GraphQLQueryException extends \Exception
      */
     public function __construct($message, $code = 500)
     {
-        $this->message = "GrapghQL Query Error: $message";
+        $this->message = $message;
+        if(null == $message) {
+            $this->message = "GrapghQL Query Error";
+        }
+
         $this->code = $code;
     }
 }

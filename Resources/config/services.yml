@@ -45,3 +45,7 @@ services:
         - "@maker.file_manager"
         - '%graphql.schema_class%'
         - "@=container.get(parameter('graphql.schema_service'))"
+
+    Garlic\GraphQL\Service\Helper\Validator:
+        arguments:
+        - "@validator"

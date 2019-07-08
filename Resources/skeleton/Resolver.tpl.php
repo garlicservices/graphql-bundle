@@ -2,6 +2,7 @@
 
 namespace <?= $namespace ?>;
 
+use Doctrine\ORM\Mapping\MappingException;
 use Garlic\GraphQL\Field\FieldHelperAbstract;
 use Youshido\GraphQL\Config\Field\FieldConfig;
 use Youshido\GraphQL\Execution\ResolveInfo;
@@ -82,7 +83,7 @@ class <?= $class_name ?> extends FieldHelperAbstract
      * @param array $args
      * @param ResolveInfo $info
      * @return mixed|null
-     * @throws \Doctrine\ORM\Mapping\MappingException
+     * @throws MappingException
      */
     public function resolve($value, array $args, ResolveInfo $info)
     {
@@ -113,8 +114,9 @@ $arguments = $this->cutArgument('arguments', $args);
         ->delete($args, $limit, $offset);
     <?php endif ?>
 
-        if (!empty($this->service->getErrors())) {
-            foreach ($this->service->getErrors() as $error) {
+        $errors = $this->service->validator->getErrors();
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
                 $info->getExecutionContext()->addError(new GraphQLQueryException($error));
             }
         }
