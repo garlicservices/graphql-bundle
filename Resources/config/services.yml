@@ -31,8 +31,8 @@ services:
         public: true
         tags: ['maker.command']
         arguments:
-            - "@=container.has('maker.doctrine_helper') ? container.get('maker.doctrine_helper')"
-            - "@=container.has('@maker.file_manager') ? container.get('@maker.file_manager')"
+            - "@=service('maker.doctrine_helper') ? service('maker.doctrine_helper')"
+            - "@=service('maker.file_manager') ? service('maker.file_manager')"
             - "@=container.get(parameter('graphql.schema_service'))"
     
     # Add maker command for creating GraphQL type
@@ -42,7 +42,7 @@ services:
         tags: ['maker.command']
         arguments:
             - "@class_finder"
-            - "@=container.has('@maker.file_manager') ? container.get('@maker.file_manager')"
+            - "@=service('maker.file_manager') ? service('maker.file_manager')"
             - '%graphql.schema_class%'
             - "@=container.get(parameter('graphql.schema_service'))"
     

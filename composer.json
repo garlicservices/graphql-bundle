@@ -19,6 +19,6 @@
     "php": ">=7.1",
     "youshido/graphql-bundle": "^1.4",
     "symfony/validator": "^4.2",
-    "symfony/maker": "^4.2"
+    "symfony/maker-bundle": "^1.12"
   }
 }
