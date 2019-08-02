@@ -50,7 +50,7 @@ abstract class FieldHelperAbstract extends AbstractContainerAwareField
      * @param array $args
      * @return array
      */
-    protected function getPagingSortArgumentsData(array $args)
+    protected function getPagingSortArgumentsData(array &$args)
     {
         $pagination = (array)$this->cutArgument('paging', $args);
 
