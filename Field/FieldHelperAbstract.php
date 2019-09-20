@@ -2,6 +2,7 @@
 
 namespace Garlic\GraphQL\Field;
 
+use Garlic\GraphQL\Argument\ArgumentTypeAbstract;
 use Youshido\GraphQLBundle\Field\AbstractContainerAwareField;
 use Youshido\GraphQL\Type\ListType\ListType;
 use Youshido\GraphQLExtension\Type\PagingParamsType;
@@ -10,7 +11,7 @@ use Youshido\GraphQLExtension\Type\Sorting\SortingParamsType;
 abstract class FieldHelperAbstract extends AbstractContainerAwareField
 {
     /**
-     * Get argument and delete them from list of incoming arguments
+     * Get arguments and delete them from list of incoming arguments.
      *
      * @param $name
      * @param $args
@@ -29,12 +30,12 @@ abstract class FieldHelperAbstract extends AbstractContainerAwareField
     }
 
     /**
-     * Make argument as list
+     * Modify arguments to accept list of values.
      *
      * @param array $arguments
      * @return array
      */
-    protected function makeMultiple(array $arguments)
+    protected function makeMultiple(array $arguments): array
     {
         $result = [];
         foreach ($arguments as $argumentName => $argument) {
@@ -42,6 +43,52 @@ abstract class FieldHelperAbstract extends AbstractContainerAwareField
         }
 
         return $result;
+    }
+
+    /**
+     * Modify arguments recursively to accept list of values.
+     *
+     * @param array $arguments
+     * @return array
+     */
+    protected function makeMultipleRecursive(array $arguments): array
+    {
+        foreach ($arguments as $key => $argument) {
+            if (isset($argument['type'])) {
+                $result[$key] = $this->makeMultipleCallback($argument['type']);
+            }
+        }
+
+        return $result ?? [];
+    }
+
+    /**
+     * Helper function that recursively modifies type to accept list of values.
+     *
+     * @param $type
+     * @return ListType
+     */
+    private function makeMultipleCallback($type)
+    {
+        if ($type->fields ?? false) {
+            foreach ($type->fields as $key => $field) {
+                $fieldType = $field['type'];
+
+                if ($field['type'] instanceof ArgumentTypeAbstract) {
+                    $type->fields[$key] = $this->makeMultipleCallback($fieldType);
+                }
+
+                if (!$field['type'] instanceof  ListType) {
+                    $type->fields[$key] = new ListType($fieldType);
+                }
+            }
+        }
+
+        if (!$type instanceof  ListType) {
+            $type = new ListType($type);
+        }
+
+        return $type;
     }
 
     /**
