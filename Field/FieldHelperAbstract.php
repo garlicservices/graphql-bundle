@@ -132,5 +132,3 @@ abstract class FieldHelperAbstract extends AbstractContainerAwareField
         );
     }
 }
-
-

@@ -8,7 +8,7 @@ use Youshido\GraphQL\Config\Object\ObjectTypeConfig;
 class ArgumentTypeAbstract extends AbstractInputObjectType
 {
     /** @var array  */
-    private $fields;
+    public $fields;
     private $name;
     private $description;
     private $multiple;
