@@ -30,6 +30,16 @@ abstract class TypeAbstract extends TypeHelper
     abstract public function build(BuilderInterface $builder);
 
     /**
+     * Returns type builder
+     *
+     * @return TypeBuilder
+     */
+    public function getBuilder()
+    {
+        return $this->builder;
+    }
+
+    /**
      * Create an object depends on is argument required
      *
      * @param bool $argument
@@ -39,18 +49,48 @@ abstract class TypeAbstract extends TypeHelper
     public function init($argument = false, $multiple = false)
     {
         if (!empty($argument)) {
-            return new ArgumentTypeAbstract(
-                ($multiple === true) ? $this->makeMultiple($this->getArguments()) : $this->getArguments(),
-                $this->getName(),
-                $this->getDescription(),
-                $multiple
-            );
+            return $this->getArgumentsType(null, $multiple);
         }
 
+        return $this->getFieldsType($multiple);
+    }
+
+
+    /**
+     * Returns Fields Type
+     *
+     * @param bool $multiple
+     * @param array $roles
+     * @return FieldAbstract
+     * @throws \Youshido\GraphQL\Exception\ConfigurationException
+     */
+    public function getFieldsType($multiple = false)
+    {
+        $fields = $this->getFields();
         return new FieldAbstract(
-            ($multiple === true) ? new ListType($this->getFields()) : $this->getFields(),
+            ($multiple === true) ? new ListType($fields) : $fields,
             $this->getName(),
             $this->getDescription()
+        );
+    }
+
+    /**
+     * Returns Argument Type
+     *
+     * @param string $actionName
+     * @param bool $multiple
+     * @param array $roles
+     * @return ArgumentTypeAbstract
+     * @throws \Youshido\GraphQL\Exception\ConfigurationException
+     */
+    public function getArgumentsType(string $actionName = null, $multiple = false)
+    {
+        $arguments = $this->getArguments($actionName, $multiple);
+        return new ArgumentTypeAbstract(
+            ($multiple === true) ? $this->makeMultiple($arguments) : $arguments,
+            $this->getName(),
+            $this->getDescription(),
+            $multiple
         );
     }
 
@@ -61,14 +101,19 @@ abstract class TypeAbstract extends TypeHelper
      * @return array
      * @throws \Youshido\GraphQL\Exception\ConfigurationException
      */
-    public function  getArguments($groupName = null, $multiple = false)
+    public function getArguments($actionName = null, $multiple = false)
     {
-        return $this->setRequired($this->updateRelations($this->builder->getArguments(), true, $multiple), $groupName);
+        return $this->setRequired(
+            $this->updateRelations($this->builder->getArguments(), true, $multiple),
+            $actionName
+        );
     }
 
     /**
      * Return list of arguments
-     * @return array
+     *
+     * @param array $roles
+     * @return mixed
      * @throws \Youshido\GraphQL\Exception\ConfigurationException
      */
     public function getFields()

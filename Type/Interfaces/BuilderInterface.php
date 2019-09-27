@@ -28,4 +28,22 @@ interface BuilderInterface
      * @return array
      */
     public function getArguments();
+
+    /**
+     * Remove field from the Type
+     *
+     * @param string|array $fieldName
+     * @return BuilderInterface
+     */
+    public function removeField($fieldName, bool $onlyArgument = false);
+
+    /**
+     * Change field options
+     *
+     * @param string|array $fieldName
+     * @param array $options
+     * @param bool $onlyArgument
+     * @return mixed
+     */
+    public function changeOptions($fieldName, array $options, bool $onlyArgument = false);
 }

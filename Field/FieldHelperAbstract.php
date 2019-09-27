@@ -73,18 +73,19 @@ abstract class FieldHelperAbstract extends AbstractContainerAwareField
         if ($type->fields ?? false) {
             foreach ($type->fields as $key => $field) {
                 $fieldType = $field['type'];
-
-                if ($field['type'] instanceof ArgumentTypeAbstract) {
+                if ($fieldType instanceof ArgumentTypeAbstract) {
                     $type->fields[$key] = $this->makeMultipleCallback($fieldType);
                 }
-
-                if (!$field['type'] instanceof  ListType) {
+                if ($fieldType instanceof ListType) {
+                    $this->makeMultipleCallback($fieldType->getItemType());
+                } else {
                     $type->fields[$key] = new ListType($fieldType);
                 }
             }
         }
-
-        if (!$type instanceof  ListType) {
+        if ($type instanceof  ListType) {
+            $this->makeMultipleCallback($type->getItemType());
+        } else {
             $type = new ListType($type);
         }
 
