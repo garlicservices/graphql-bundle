@@ -91,18 +91,18 @@ class TypeBuilder implements BuilderInterface
     /**
      * Remove field from a Type
      *
-     * @param array|string $fieldName
+     * @param array|string $fieldNames
      *
      * @return $this|BuilderInterface
      */
-    public function removeField($names)
+    public function removeField($fieldNames)
     {
-        if(!is_array($names)) {
-            $names = [$fieldName];
+        if(!is_array($fieldNames)) {
+            $fieldNames = [$fieldNames];
         }
 
-        foreach ($names as $name) {
-            unset($this->$arguments[$name]);
+        foreach ($fieldNames as $name) {
+            unset($this->arguments[$name]);
             unset($this->fields[$name]);
         }
 
@@ -112,19 +112,17 @@ class TypeBuilder implements BuilderInterface
     /**
      * Remove field from a Type
      *
-     * @param array|string $fieldName
-     * @param bool         $onlyArgument
-     *
+     * @param array|string $fieldNames
      * @return $this|BuilderInterface
      */
-    public function removeArgument($names)
+    public function removeArgument($fieldNames)
     {
-        if(!is_array($names)) {
-            $names = [$fieldName];
+        if(!is_array($fieldNames)) {
+            $fieldNames = [$fieldNames];
         }
 
-        foreach ($names as $name) {
-            unset($this->$arguments[$name]);
+        foreach ($fieldNames as $name) {
+            unset($this->arguments[$name]);
         }
 
         return $this;
@@ -133,23 +131,23 @@ class TypeBuilder implements BuilderInterface
     /**
      * Change field options
      *
-     * @param string|array $fieldName
      * @param array $options
+     * @param null $fieldNames
      * @param bool $onlyArgument
      * @return $this|mixed
      */
-    public function changeOptions(array $options, $fieldName = null, bool $onlyArgument = false)
+    public function changeOptions(array $options, $fieldNames = null, bool $onlyArgument = false)
     {
-        if(isset($names)) {
-            if (!is_array($names)) {
-                $names = [$names];
+        if(isset($fieldNames)) {
+            if (!is_array($fieldNames)) {
+                $fieldNames = [$fieldNames];
             }
         } else {
-            $names = $this->fields;
+            $fieldNames = $this->fields;
         }
 
-        foreach ($names as $name) {
-            $this->$arguments[$name] = array_merge_recursive($this->$arguments[$name], $options);
+        foreach ($fieldNames as $name) {
+            $this->arguments[$name] = array_merge_recursive($this->arguments[$name], $options);
             if (false === $onlyArgument) {
                 $this->fields[$name] = array_merge_recursive($this->fields[$name], $options);
             }
