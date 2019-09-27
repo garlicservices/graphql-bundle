@@ -34,6 +34,28 @@ class TypeBuilder implements BuilderInterface
     }
 
     /**
+     * Get field by name
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function getField(string $name)
+    {
+        return $this->fields[$name];
+    }
+
+    /**
+     * Get argument by name
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function getArgument(string $name)
+    {
+        return $this->fields[$name];
+    }
+
+    /**
      * Add single fields with type and list of options
      *
      * @param string $name
@@ -52,6 +74,42 @@ class TypeBuilder implements BuilderInterface
     }
 
     /**
+     * Add single argument with type and list of options
+     *
+     * @param string $name
+     * @param        $type
+     * @param array  $options
+     * @return $this|BuilderInterface
+     */
+    public function addArgument(string $name, $type, array $options = [])
+    {
+        $this->arguments[$name] = array_merge($options, ['type' => $type]);
+
+        return $this;
+    }
+
+    /**
+     * Remove field from a Type
+     *
+     * @param array|string $fieldName
+     *
+     * @return $this|BuilderInterface
+     */
+    public function removeField($names)
+    {
+        if(!is_array($names)) {
+            $names = [$fieldName];
+        }
+
+        foreach ($names as $name) {
+            unset($this->$arguments[$name]);
+            unset($this->fields[$name]);
+        }
+
+        return $this;
+    }
+
+    /**
      * Remove field from a Type
      *
      * @param array|string $fieldName
@@ -59,17 +117,14 @@ class TypeBuilder implements BuilderInterface
      *
      * @return $this|BuilderInterface
      */
-    public function removeField($fieldName, bool $onlyArgument = false)
+    public function removeArgument($names)
     {
-        if(!is_array($fieldName)) {
+        if(!is_array($names)) {
             $names = [$fieldName];
         }
 
         foreach ($names as $name) {
             unset($this->$arguments[$name]);
-            if (false === $onlyArgument) {
-                unset($this->fields[$name]);
-            }
         }
 
         return $this;
@@ -83,10 +138,14 @@ class TypeBuilder implements BuilderInterface
      * @param bool $onlyArgument
      * @return $this|mixed
      */
-    public function changeOptions($fieldName, array $options, bool $onlyArgument = false)
+    public function changeOptions(array $options, $fieldName = null, bool $onlyArgument = false)
     {
-        if(!is_array($fieldName)) {
-            $names = [$fieldName];
+        if(isset($names)) {
+            if (!is_array($names)) {
+                $names = [$names];
+            }
+        } else {
+            $names = $this->fields;
         }
 
         foreach ($names as $name) {

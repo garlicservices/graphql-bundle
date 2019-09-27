@@ -88,7 +88,7 @@ abstract class FieldHelperAbstract extends AbstractContainerAwareField
         } else {
             $type = new ListType($type);
         }
-
+        
         return $type;
     }
 

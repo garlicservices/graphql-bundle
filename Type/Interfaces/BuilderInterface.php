@@ -35,7 +35,7 @@ interface BuilderInterface
      * @param string|array $fieldName
      * @return BuilderInterface
      */
-    public function removeField($fieldName, bool $onlyArgument = false);
+    public function removeField($fieldName);
 
     /**
      * Change field options
@@ -45,5 +45,5 @@ interface BuilderInterface
      * @param bool $onlyArgument
      * @return mixed
      */
-    public function changeOptions($fieldName, array $options, bool $onlyArgument = false);
+    public function changeOptions(array $options, $fieldName = null, bool $onlyArgument = false);
 }
