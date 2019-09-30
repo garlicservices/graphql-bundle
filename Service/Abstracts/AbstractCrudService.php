@@ -3,29 +3,17 @@
 namespace Garlic\GraphQL\Service\Abstracts;
 
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\Common\Inflector\Inflector;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class AbstractCrudService
- * @deprecated use EntityCrudService or DocumentCrudService
+ * @internal use EntityCrudService or DocumentCrudService
  */
 class AbstractCrudService
 {
-    /** @var ObjectManager */
+    /** @var */
     protected $manager;
-
-    /**
-     * ApartmentService constructor.
-     *
-     * @param EntityManagerInterface $manager
-     */
-    public function __construct(EntityManagerInterface $manager)
-    {
-        $this->manager = $manager;
-    }
 
     /**
      * Hydrate array to entity object

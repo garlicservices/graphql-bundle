@@ -4,11 +4,11 @@ namespace <?= $namespace ?>;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\MappingException;
-use Garlic\GraphQL\Service\Abstracts\AbstractCrudService;
+use Garlic\GraphQL\Service\Abstracts\EntityCrudService;
 use Garlic\GraphQL\Service\Helper\Validator;
 use <?= $entityFullName ?>;
 
-class <?= $class_name ?> extends AbstractCrudService
+class <?= $class_name ?> extends EntityCrudService
 {
 /** @var Validator */
     public $validator;

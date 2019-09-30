@@ -7,9 +7,23 @@ use Doctrine\Common\Inflector\Inflector;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\MappingException;
 use Garlic\GraphQL\Service\Abstracts\AbstractCrudService;
+use Doctrine\ODM\MongoDB\DocumentManager;
 
 class DocumentCrudService extends AbstractCrudService
 {
+    /** @var DocumentManager */
+    protected $manager;
+
+    /**
+     * ApartmentService constructor.
+     *
+     * @param DocumentManager $manager
+     */
+    public function __construct(DocumentManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
     /**
      * Map and hydrate relations
      *
