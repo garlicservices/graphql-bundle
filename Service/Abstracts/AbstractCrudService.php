@@ -3,66 +3,71 @@
 namespace Garlic\GraphQL\Service\Abstracts;
 
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\Common\Inflector\Inflector;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Class AbstractCrudService
+ * @deprecated use EntityCrudService or DocumentCrudService
+ */
 class AbstractCrudService
 {
-    /** @var EntityManagerInterface */
-    protected $em;
+    /** @var ObjectManager */
+    protected $manager;
 
     /**
      * ApartmentService constructor.
      *
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface $manager
      */
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $manager)
     {
-        $this->em = $em;
+        $this->manager = $manager;
     }
 
     /**
      * Hydrate array to entity object
      *
-     * @param $entity
+     * @param $object
      * @param array $arguments
      * @return Entity
      * @throws \Doctrine\ORM\Mapping\MappingException
      */
-    protected function hydrate($entity, array $arguments)
+    protected function hydrate($object, array $arguments)
     {
         foreach ($arguments as $argument => $value) {
             if (is_array($value)) {
-                if(isset($this->em->getClassMetadata(get_class($entity))->associationMappings[$argument])) {
-                    $value = $this->hydrateRelation($entity, $argument, $value);
+                if(isset($this->manager->getClassMetadata(get_class($object))->associationMappings[$argument])) {
+                    $value = $this->hydrateRelation($object, $argument, $value);
                 }
             }
-            $entity->{"set".Inflector::camelize($argument)}($value);
+            $object->{"set".Inflector::camelize($argument)}($value);
         }
 
-        return $entity;
+        return $object;
     }
 
     /**
      * Map and hydrate relations
      *
-     * @param $entity
+     * @param $object
      * @param $name
      * @param $value
      * @return Entity
      * @throws \Doctrine\ORM\Mapping\MappingException
      */
-    private function hydrateRelation($entity, $name, $value)
+    protected function hydrateRelation($object, string $name, $value)
     {
-        $relationClass = $this->em
-            ->getClassMetadata(get_class($entity))
+        $relationClass = $this->manager
+            ->getClassMetadata(get_class($object))
             ->getAssociationMapping($name)["targetEntity"]
         ;
 
-        $relation = $entity->{"get".Inflector::camelize($name)}();
+        $relation = $object->{"get".Inflector::camelize($name)}();
         if(in_array('id', array_keys($value))) {
-            $relation = $this->em->getRepository($relationClass)->find($value['id']);
+            $relation = $this->manager->getRepository($relationClass)->find($value['id']);
             unset($value['id']);
         } elseif(empty($relation)) {
             $relation = new $relationClass;
@@ -77,7 +82,7 @@ class AbstractCrudService
      * @param $sort
      * @return array
      */
-    public function mapSorting($sort)
+    protected function mapSorting($sort)
     {
         if(empty($sort)) {
             return [];
