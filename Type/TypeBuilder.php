@@ -132,7 +132,7 @@ class TypeBuilder implements BuilderInterface
      * Change field options
      *
      * @param array $options
-     * @param null $fieldNames
+     * @param array|string|null $fieldNames
      * @param bool $onlyArgument
      * @return $this|mixed
      */
