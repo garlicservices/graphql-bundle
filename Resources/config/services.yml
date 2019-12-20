@@ -49,3 +49,5 @@ services:
     Garlic\GraphQL\Service\Helper\Validator:
         arguments:
             - "@validator"
+
+    Garlic\GraphQL\Field\FieldHelperAbstract:
