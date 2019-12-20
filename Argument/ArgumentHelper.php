@@ -2,7 +2,6 @@
 
 namespace Garlic\GraphQL\Argument;
 
-use Garlic\GraphQL\Field\FieldHelperAbstract;
 use Youshido\GraphQL\Type\ListType\ListType;
 use Youshido\GraphQLBundle\Field\AbstractContainerAwareField;
 use Youshido\GraphQLExtension\Type\PagingParamsType;
