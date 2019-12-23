@@ -8,7 +8,7 @@ services:
             $eventDispatcher: "@event_dispatcher"
         calls:
             - [setSecurityManager, ['@graphql.security_manager']]
-    
+
     
     # Helper for making classes
     class_finder:
@@ -49,3 +49,5 @@ services:
     Garlic\GraphQL\Service\Helper\Validator:
         arguments:
             - "@validator"
+
+    Garlic\GraphQL\Argument\ArgumentHelper:
