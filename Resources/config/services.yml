@@ -51,3 +51,11 @@ services:
             - "@validator"
 
     Garlic\GraphQL\Argument\ArgumentHelper:
+
+    Garlic\GraphQL\Service\DocumentHydrator:
+        arguments:
+            - "@doctrine_mongodb.odm.document_manager"
+
+    Garlic\GraphQL\Service\EntityHydrator:
+        arguments:
+            - "@doctrine.orm.entity_manager"

@@ -12,12 +12,13 @@ class EntityCrudService extends AbstractCrudService
     protected $manager;
 
     /**
-     * ApartmentService constructor.
-     *
+     * EntityCrudService constructor.
+     * @param EntityHydrator         $hydrator
      * @param EntityManagerInterface $manager
      */
     public function __construct(EntityManagerInterface $manager)
     {
-        $this->manager = $manager;
+        $this->manager = $manager;        
+        $this->hydrator = new EntityHydrator($manager);
     }
 }

@@ -3,21 +3,23 @@
 namespace Garlic\GraphQL\Service\Abstracts;
 
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\Common\Inflector\Inflector;
 
 /**
  * Class AbstractCrudService
- * @internal use EntityCrudService or DocumentCrudService
+ * @internal use EntityCrudService or DocumentCrudService | for hydration Use DocumentHydrator or EntityHydrator
  */
 class AbstractCrudService
 {
-    /** @var */
-    protected $manager;
+    /** @var ObjectHydrator */
+    protected $hydrator;
 
     /**
      * Hydrate array to entity object
      *
+     * @deprecated use EntityHydrator
+     * 
      * @param $object
      * @param array $arguments
      * @return Entity
@@ -25,20 +27,12 @@ class AbstractCrudService
      */
     protected function hydrate($object, array $arguments)
     {
-        foreach ($arguments as $argument => $value) {
-            if (is_array($value)) {
-                if(isset($this->manager->getClassMetadata(get_class($object))->associationMappings[$argument])) {
-                    $value = $this->hydrateRelation($object, $argument, $value);
-                }
-            }
-            $object->{"set".Inflector::camelize($argument)}($value);
-        }
-
-        return $object;
+        return $this->hydrator->hydrate($object, $arguments);
     }
 
     /**
      * Map and hydrate relations
+     * @deprecated use EntityHydrator
      *
      * @param $object
      * @param $name
@@ -48,37 +42,18 @@ class AbstractCrudService
      */
     protected function hydrateRelation($object, string $name, $value)
     {
-        $relationClass = $this->manager
-            ->getClassMetadata(get_class($object))
-            ->getAssociationMapping($name)["targetEntity"]
-        ;
-
-        $relation = $object->{"get".Inflector::camelize($name)}();
-        if(in_array('id', array_keys($value))) {
-            $relation = $this->manager->getRepository($relationClass)->find($value['id']);
-            unset($value['id']);
-        } elseif(empty($relation)) {
-            $relation = new $relationClass;
-        }
-
-        return $this->hydrate($relation, $value);
+        return $this->hydrator->hydrateRelation($object, $name, $value);
     }
 
     /**
      * Make sorting array
-     *
+     * @deprecated use EntityHydrator
+     * 
      * @param $sort
      * @return array
      */
     protected function mapSorting($sort)
     {
-        if(empty($sort)) {
-            return [];
-        }
-
-        $mapping = [-1 => 'DESC', 1 => 'ASC'];
-        return [
-            $sort['field'] => $mapping[$sort['order']]
-        ];
+        return $this->hydrator->mapSorting($sort);
     }
 }
